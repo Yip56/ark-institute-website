@@ -1,0 +1,223 @@
+.hero {
+  padding: var(--space-24) 0 var(--space-20);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+.headline {
+  font-family: var(--font-serif);
+  font-size: clamp(var(--text-3xl), 5vw, var(--text-6xl));
+  font-weight: var(--weight-regular);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
+}
+
+.desc {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-8);
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-8);
+  background-color: var(--color-accent);
+  color: var(--color-text-inverse);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.ctaBtn:hover {
+  background-color: var(--color-accent-light);
+  transform: translateY(-2px);
+}
+
+/* Grades */
+.gradesSection {
+  padding: var(--space-24) 0;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.sectionSub {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-12);
+  max-width: 560px;
+  line-height: var(--leading-relaxed);
+}
+
+.gradesGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+
+.gradeCard {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  transition: border-color var(--transition-base), background-color var(--transition-base);
+}
+
+.gradeCard:hover {
+  border-color: rgba(212, 168, 83, 0.3);
+}
+
+.gradeCard.debut {
+  border-color: rgba(212, 168, 83, 0.5);
+  background-color: rgba(212, 168, 83, 0.06);
+  grid-column: span 2;
+}
+
+.gradeNum {
+  font-family: var(--font-serif);
+  font-size: var(--text-4xl);
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.gradeName {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.gradeDesc {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+/* Journey steps */
+.journeySection {
+  padding: var(--space-24) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+  border-bottom: 1px solid var(--color-border);
+  align-items: start;
+}
+
+.stepNum {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  color: var(--color-accent);
+  opacity: 0.4;
+  line-height: 1;
+  padding-top: var(--space-1);
+}
+
+.stepTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.stepDesc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* Instruments */
+.instrumentsSection {
+  padding: var(--space-24) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.instrumentsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.instrumentCard {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  transition: border-color var(--transition-fast);
+}
+
+.instrumentCard:hover {
+  border-color: rgba(212, 168, 83, 0.3);
+}
+
+.instrumentIcon { font-size: 2rem; }
+.instrumentName {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 1000px) {
+  .gradesGrid { grid-template-columns: repeat(3, 1fr); }
+  .gradeCard.debut { grid-column: span 1; }
+}
+
+@media (max-width: 768px) {
+  .heroInner { grid-template-columns: 1fr; }
+  .gradesGrid { grid-template-columns: repeat(2, 1fr); }
+  .instrumentsGrid { grid-template-columns: repeat(2, 1fr); }
+}

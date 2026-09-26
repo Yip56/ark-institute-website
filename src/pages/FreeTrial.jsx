@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../firebase.js'
 import styles from './FreeTrial.module.css'
 
 const PERKS = [
@@ -24,16 +27,99 @@ const PERKS = [
   },
 ]
 
+// Replace with the studio's WhatsApp number (country code + number, no + or spaces)
+const WHATSAPP_NUMBER = '60189844279'
+
+const PROGRAM_LABELS = {
+  contemporary: 'Contemporary Music',
+  classical: 'Classical Music',
+  unsure: 'Not sure yet',
+}
+
+const EXPERIENCE_LABELS = {
+  none: 'Complete beginner',
+  some: 'Some experience',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
+}
+
+const AGE_LABELS = {
+  child: 'Child (under 12)',
+  teen: 'Teen (12–17)',
+  adult: 'Adult (18+)',
+}
+
 export default function FreeTrial() {
   const [submitted, setSubmitted] = useState(false)
+  const [sending,   setSending]   = useState(false)
 
-  // TODO: Integrate form submission with backend or form service (e.g. Formspree, SendGrid, Firebase Functions)
-  // Currently front-end only — this handler just simulates a submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Replace this with a real API call. Example:
-    // const data = Object.fromEntries(new FormData(e.target))
-    // await fetch('/api/book-trial', { method: 'POST', body: JSON.stringify(data) })
+    setSending(true)
+    const d = Object.fromEntries(new FormData(e.target))
+
+    const programLabel    = PROGRAM_LABELS[d.program]    ?? d.program    ?? '—'
+    const experienceLabel = EXPERIENCE_LABELS[d.experience] ?? d.experience ?? '—'
+    const ageLabel        = AGE_LABELS[d.age]            ?? d.age         ?? '—'
+    const fullName        = `${d.firstName} ${d.lastName}`
+
+    // 1. Open WhatsApp with pre-filled message
+    const waLines = [
+      `Hi Ark Music Studio! I'd like to book a free trial class. 🎵`,
+      ``,
+      `*Name:* ${fullName}`,
+      `*Email:* ${d.email}`,
+      d.phone      ? `*Phone:* ${d.phone}`                  : null,
+      d.program    ? `*Program:* ${programLabel}`           : null,
+      d.instrument ? `*Instrument:* ${d.instrument}`        : null,
+      d.experience ? `*Experience:* ${experienceLabel}`     : null,
+      d.age        ? `*Age Group:* ${ageLabel}`             : null,
+      d.message    ? `\n*Additional info:*\n${d.message}`   : null,
+    ].filter(Boolean).join('\n')
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waLines)}`, '_blank')
+
+    // 2. Send email via EmailJS
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name:   fullName,
+          from_email:  d.email,
+          phone:       d.phone       || '—',
+          program:     programLabel,
+          instrument:  d.instrument  || '—',
+          experience:  experienceLabel,
+          age_group:   ageLabel,
+          message:     d.message     || '—',
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      )
+    } catch (err) {
+      console.warn('EmailJS failed:', err)
+    }
+
+    // 3. Write notification to StudioOS Firestore (visible to all admins)
+    try {
+      await addDoc(collection(db, 'notifications'), {
+        type:       'trial_booking',
+        toRole:     'admin',
+        status:     'pending',
+        name:       fullName,
+        email:      d.email,
+        phone:      d.phone       || '',
+        program:    programLabel,
+        instrument: d.instrument  || '',
+        experience: experienceLabel,
+        ageGroup:   ageLabel,
+        message:    d.message     || '',
+        createdAt:  serverTimestamp(),
+      })
+    } catch (err) {
+      console.warn('Firestore notification failed:', err)
+    }
+
+    setSending(false)
     setSubmitted(true)
   }
 
@@ -70,10 +156,10 @@ export default function FreeTrial() {
                 <div style={{ textAlign: 'center', padding: 'var(--space-8) 0' }}>
                   <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-4)' }}>✦</div>
                   <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', color: 'var(--color-text-primary)', marginBottom: 'var(--space-3)' }}>
-                    We'll be in touch shortly.
+                    Almost there!
                   </h2>
                   <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', lineHeight: 'var(--leading-relaxed)' }}>
-                    Thank you for booking a free trial class. One of our team members will contact you within 24 hours to confirm your session time.
+                    Your details are pre-filled in WhatsApp — just hit <strong style={{ color: 'var(--color-text-primary)' }}>Send</strong> to complete your booking request. We'll confirm your session time shortly.
                   </p>
                 </div>
               ) : (
@@ -151,16 +237,18 @@ export default function FreeTrial() {
                       />
                     </div>
 
-                    <button type="submit" className={styles.submitBtn}>
-                      Request Free Trial Class
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
+                    <button type="submit" className={styles.submitBtn} disabled={sending}>
+                      {sending ? 'Sending…' : 'Send via WhatsApp'}
+                      {!sending && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      )}
                     </button>
                   </form>
 
                   <p className={styles.formNote}>
-                    We'll reach out within 24 hours. No spam, ever.
+                    Tapping the button opens WhatsApp with your details pre-filled — just hit send.
                   </p>
                 </>
               )}

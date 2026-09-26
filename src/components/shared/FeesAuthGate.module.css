@@ -1,0 +1,142 @@
+.gate {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+}
+
+/* Inline variant — sits inside a section, no full-page height */
+.gateInline {
+  padding: var(--space-10) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Loading spinner ─────────────────────────────────────────────── */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Gate card ───────────────────────────────────────────────────── */
+.card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10) var(--space-12);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+  line-height: 1.15;
+}
+
+.desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-8);
+}
+.desc strong { color: var(--color-text-primary); font-weight: var(--weight-medium); }
+
+.error {
+  font-size: var(--text-xs);
+  color: #FF5A65;
+  margin-bottom: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 90, 101, 0.08);
+  border: 1px solid rgba(255, 90, 101, 0.2);
+  border-radius: var(--radius-md);
+}
+
+/* ── Google sign-in button ───────────────────────────────────────── */
+.googleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.googleBtn:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-muted);
+}
+
+/* ── Access denied sign-out button ──────────────────────────────── */
+.signOutBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-6);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+.signOutBtn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* ── Signed-in bar (shown when viewing fees) ─────────────────────── */
+.signedInBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.signedInBar button {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+}
+.signedInBar button:hover { color: var(--color-accent); }
+
+@media (max-width: 768px) {
+  .card { padding: var(--space-8) var(--space-6); }
+}

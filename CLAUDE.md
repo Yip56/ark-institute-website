@@ -118,6 +118,8 @@ ark-institute-website/
 │   │   ├── About.module.css
 │   │   ├── Pricing.jsx               # Comparison tables for both tracks + FAQ
 │   │   ├── Pricing.module.css
+│   │   ├── Fees.jsx                  # Live fee table — fetches from getPublicFees Cloud Function
+│   │   ├── Fees.module.css
 │   │   ├── FreeTrial.jsx             # Booking form (front-end only) + value prop
 │   │   ├── FreeTrial.module.css
 │   │   ├── Contact.jsx               # Contact form + info + map placeholder
@@ -143,10 +145,68 @@ ark-institute-website/
 | `/classical-music` | Classical Music | `pages/ClassicalMusic.jsx` |
 | `/about` | About & Instructors | `pages/About.jsx` |
 | `/pricing` | Pricing | `pages/Pricing.jsx` |
+| `/fees` | Live Fee Schedule | `pages/Fees.jsx` |
 | `/free-trial` | Free Trial Booking | `pages/FreeTrial.jsx` |
 | `/contact` | Contact | `pages/Contact.jsx` |
 
 All routes are nested under `Layout` (which renders Header + Footer around `<Outlet>`).
+
+---
+
+## Live Fee Sync Pipeline
+
+The `/fees` page fetches live pricing data from a Firebase Cloud Function that reads StudioOS's Firestore database.
+
+### Data flow
+```
+StudioOS admin (Grades & Fees view)
+  → Save Changes button
+    → Firestore: fees/classical  +  fees/contemporary
+      → getPublicFees Cloud Function (admin SDK, server-side)
+        → HTTPS JSON response (Cache-Control: 10 min)
+          → Fees.jsx fetches on page load
+            → renders instrument × level × duration table
+```
+
+### Environment variable
+`VITE_FEES_API_URL` — the Cloud Function's public HTTPS URL. Set this in `.env` (see `.env.example`).
+Find the URL after deploying the function: run `firebase functions:list` in `studio-os/`.
+
+### Fee data structure (from Cloud Function)
+```json
+{
+  "classical": {
+    "Piano": {
+      "Beginner":  { "30": 95,  "45": 130, "60": 160 },
+      "Grade 1":   { "30": 105, "45": 140, "60": 175 },
+      ...
+      "Grade 8":   { "30": 170, "45": 225, "60": 280 }
+    },
+    "Drum": { ... },
+    ...
+  },
+  "contemporary": {
+    "Piano": {
+      "Beginner":      { "30": 95,  "45": 130, "60": 160 },
+      "Intermediate":  { "30": 120, "45": 160, "60": 200 },
+      "Advanced":      { "30": 150, "45": 200, "60": 250 }
+    },
+    ...
+  }
+}
+```
+
+### Fees.jsx behaviour
+- Fetches on mount; shows animated skeleton rows while loading
+- Instrument selector (pill buttons) + Classical/Contemporary toggle
+- Table: Level | 30 min | 45 min | 60 min
+- Error state: friendly message + link to Contact page
+- **Print/Download:** `window.print()` button — `@media print` styles hide everything except the table and inject a plain text header with studio name + current selection. Produces clean A4 output.
+
+### Adding a new instrument
+1. In StudioOS `src/data/seed.js`: add the instrument to `INSTRUMENTS` array and add default fee rows to `SEED_FEES` + `SEED_CONTEMPORARY_FEES`.
+2. Open StudioOS → Grades & Fees → click Save Changes.
+3. The website fees page reads instruments dynamically from the Cloud Function response — **no website changes needed**.
 
 ---
 
@@ -259,6 +319,7 @@ Dev server: http://localhost:5173
 
 ```bash
 npm run build    # Production build → dist/
+firebase deploy --only hosting
 npm run preview  # Preview production build locally
 ```
 

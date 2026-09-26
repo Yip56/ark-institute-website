@@ -3,7 +3,18 @@
     "allow": [
       "Bash(npm create *)",
       "Bash(npm install *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(firebase functions:list)",
+      "Bash(gcloud run *)",
+      "PowerShell(gcloud run services describe *)",
+      "PowerShell(Invoke-WebRequest -Uri \"https://getpublicfees-704177513404-as.a.run.app\" -Method GET -TimeoutSec 10 | Select-Object StatusCode, @{N='Body';E={$_.Content.Substring\\(0,[Math]::Min\\(200,$_.Content.Length\\)\\)}})",
+      "PowerShell(Invoke-WebRequest -Uri \"https://asia-southeast1-ark-music-portal.cloudfunctions.net/getPublicFees\" -Method GET -TimeoutSec 10 | Select-Object StatusCode, @{N='Body';E={$_.Content.Substring\\(0,[Math]::Min\\(300,$_.Content.Length\\)\\)}})",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://asia-southeast1-ark-music-portal.cloudfunctions.net/getPublicFees\")",
+      "Bash(curl -s \"https://asia-southeast1-ark-music-portal.cloudfunctions.net/getPublicFees\")",
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\YLX\\\\studio-os\\\\src\\\\views\")",
+      "Bash(Select-Object Name)",
+      "Bash(n)",
+      "Bash(Set-Content -Path \"C:\\\\Users\\\\YLX\\\\ark-institute-website\\\\.env\" -Encoding utf8 -Value \"VITE_FEES_API_URL=https://asia-southeast1-ark-music-portal.cloudfunctions.net/getPublicFees`n`nVITE_EMAILJS_SERVICE_ID=service_hs4hoqb`nVITE_EMAILJS_TEMPLATE_ID=template_ss4brof`nVITE_EMAILJS_PUBLIC_KEY=gcp80TyATzTCEOW4_\")"
     ]
   }
 }

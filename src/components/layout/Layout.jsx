@@ -14,21 +14,35 @@ export default function Layout() {
 
   // Intersection observer for scroll animations
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
+          if (entry.isIntersecting) entry.target.classList.add('visible')
         })
       },
       { threshold: 0.12 }
     )
 
-    const elements = document.querySelectorAll('.fade-up, .fade-in')
-    elements.forEach(el => observer.observe(el))
+    const observe = (root) => {
+      root.querySelectorAll('.fade-up, .fade-in').forEach(el => io.observe(el))
+    }
 
-    return () => observer.disconnect()
+    observe(document)
+
+    // Watch for elements added after async auth/data resolution
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType !== 1) return
+          if (node.matches?.('.fade-up, .fade-in')) io.observe(node)
+          observe(node)
+        })
+      })
+    })
+
+    mo.observe(document.body, { childList: true, subtree: true })
+
+    return () => { io.disconnect(); mo.disconnect() }
   }, [pathname])
 
   return (

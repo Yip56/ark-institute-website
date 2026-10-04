@@ -396,6 +396,10 @@ export default function Pricing() {
               <div key={instrument} className={feeStyles.instrumentBg}
                 style={{ backgroundImage: `url('/images/instruments/${instrument.toLowerCase()}.webp'), url('/images/instruments/${instrument.toLowerCase()}.png')` }}
               />
+              <div className={feeStyles.cardHeader}>
+                <span className={feeStyles.cardSyllabus}>{syllabus === 'classical' ? 'Classical' : 'Contemporary'}</span>
+                <span className={feeStyles.cardInstrument}>{instrument}</span>
+              </div>
               {loading && (
                 <div className={feeStyles.loadingState}>
                   <div className={feeStyles.skeleton} style={{ width: '100%', height: 44 }} />

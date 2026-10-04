@@ -136,7 +136,7 @@
   /* Fade in when instrument switches (key triggers remount) */
   animation: bgAppear 0.5s ease;
 }
-@keyframes bgAppear { from { opacity: 0; } to { opacity: 0.5; } } 
+@keyframes bgAppear { from { opacity: 0; } to { opacity: 0.10; } }
 
 /* All foreground content sits above the background */
 .printHeader,
@@ -149,6 +149,28 @@
 
 /* Print-only header — hidden on screen */
 .printHeader { display: none; }
+
+/* ── Card header — instrument + syllabus label inside the card ── */
+.cardHeader {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6) var(--space-5);
+}
+.cardInstrument {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+}
+.cardSyllabus {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+}
 
 /* ── Loading skeleton ────────────────────────────────────────── */
 .loadingState { padding: var(--space-5); display: flex; flex-direction: column; gap: 3px; }

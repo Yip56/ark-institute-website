@@ -14,7 +14,10 @@
       "Bash(Get-ChildItem \"C:\\\\Users\\\\YLX\\\\studio-os\\\\src\\\\views\")",
       "Bash(Select-Object Name)",
       "Bash(n)",
-      "Bash(Set-Content -Path \"C:\\\\Users\\\\YLX\\\\ark-institute-website\\\\.env\" -Encoding utf8 -Value \"VITE_FEES_API_URL=https://asia-southeast1-ark-music-portal.cloudfunctions.net/getPublicFees`n`nVITE_EMAILJS_SERVICE_ID=service_hs4hoqb`nVITE_EMAILJS_TEMPLATE_ID=template_ss4brof`nVITE_EMAILJS_PUBLIC_KEY=gcp80TyATzTCEOW4_\")"
+      "Bash(Set-Content -Path \"C:\\\\Users\\\\YLX\\\\ark-institute-website\\\\.env\" -Encoding utf8 -Value \"VITE_FEES_API_URL=https://asia-southeast1-ark-music-portal.cloudfunctions.net/getPublicFees`n`nVITE_EMAILJS_SERVICE_ID=service_hs4hoqb`nVITE_EMAILJS_TEMPLATE_ID=template_ss4brof`nVITE_EMAILJS_PUBLIC_KEY=gcp80TyATzTCEOW4_\")",
+      "Bash(node -e \"require\\('fs'\\).readFileSync\\('.env','utf8'\\).split\\('\\\\n'\\).forEach\\(\\(l,i\\)=>console.log\\(i,JSON.stringify\\(l\\)\\)\\)\")",
+      "Bash(node -e ' *)",
+      "PowerShell(Get-Process *)"
     ]
   }
 }
